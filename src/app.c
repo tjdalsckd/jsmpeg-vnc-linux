@@ -156,6 +156,7 @@ void app_on_close(app_t *self, struct lws *socket) {
 void app_on_message(app_t *self, struct lws *socket, void *data, size_t len) {
     input_type_t type = (input_type_t)((unsigned short *)data)[0];
 
+		
     if( type & input_type_key && len >= sizeof(input_key_t) ) {
         input_key_t *input = (input_key_t *)data;
 
@@ -165,10 +166,11 @@ void app_on_message(app_t *self, struct lws *socket, void *data, size_t len) {
         //Skip if the JS keycode couldn't be bound to a X11 keycode
         if (x11keycode != 0) {
             XTestFakeKeyEvent(self->display, x11keycode, pressed, 0);
+           
         }
 
     }
-    else if( type & input_type_mouse && len >= sizeof(input_mouse_t) ) {
+    else if( type & input_type_mouse_absolute ) {
         input_mouse_t *input = (input_mouse_t *)data;
 
         if( type & input_type_mouse_absolute ) {
@@ -204,6 +206,7 @@ void app_on_message(app_t *self, struct lws *socket, void *data, size_t len) {
                 XTestFakeButtonEvent(self->display, button, pressed, CurrentTime);
             }
         }
+
     }
 }
 

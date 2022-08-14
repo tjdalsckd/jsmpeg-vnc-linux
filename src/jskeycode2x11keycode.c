@@ -19,12 +19,14 @@ KeyCode js_keycode_to_x11keycode(Display *display, unsigned short keycode) {
     case (16): keysym = XK_Shift_L; break;
     case (17): keysym = XK_Control_L; break;
     case (18): keysym = XK_Alt_L; break;
+    case (21): keysym = XK_Alt_R; break;    
     case (20): keysym = XK_Caps_Lock; break;
     case (27): keysym = XK_Escape; break;
     case (37): keysym = XK_Left; break;
     case (38): keysym = XK_Up; break;
     case (39): keysym = XK_Right; break;
     case (40): keysym = XK_Down; break;
+    case (190): keysym = XK_KP_Decimal;break;
     default: keysym = keycode; break;
 
   }

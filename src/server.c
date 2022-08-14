@@ -149,6 +149,7 @@ static int callback_http(
             return 0;
         }
         lws_return_http_status(wsi, HTTP_STATUS_NOT_FOUND,NULL);
+
         break;
     case LWS_CALLBACK_ESTABLISHED:
         client_insert(&self->clients, wsi);
@@ -156,12 +157,14 @@ static int callback_http(
         if( self->on_connect ) {
             self->on_connect(self, wsi);
         }
+
         break;
 
     case LWS_CALLBACK_RECEIVE:
         if( self->on_message ) {
             self->on_message(self, wsi, in, len);
         }
+
         break;
 
     case LWS_CALLBACK_CLOSED:
@@ -170,8 +173,11 @@ static int callback_http(
         if( self->on_close ) {
             self->on_close(self, wsi);
         }
+
         break;
     }
+
     return lws_callback_http_dummy(wsi, reason, user, in, len);
+    
     //return 0;
 }
