@@ -56,6 +56,7 @@ For a project I was working on I needed a way to stream desktop applications to 
 
 Unfortunately, the jsmpeg-vnc project grabbed screen data using the Windows API. The project I was working on would be run on a Linux-based server. Thus, I ported the software to grab screen data using the X11 library instead.
 
+
 ## Ported
 Sharing the whole desktop.
 
@@ -64,3 +65,58 @@ Sharing individual application windows and areas around the cursor.
 
 ## Known issues
 No windows appear with GNOME/Unity, only the wallpaper is shown. Works with LXDE though.  (http://stackoverflow.com/questions/37972928/xgetimage-captures-wallpaper-but-no-windows-c-x11)
+
+## Changed 
+I changed the code to make mouse events work normally
+
+
+
+
+
+## 설치방법
+이 코드는 ubuntu 20.04 환경에서 정상적으로 작동했습니다. 다른 환경은 테스트하지 않았습니다.
+
+```bash
+  sudo apt-get install -y build-essential
+  sudo apt-get install -y libx11-dev
+  sudo apt-get install -y libavutil-dev
+  sudo apt-get install -y libavcodec-dev
+  sudo apt-get install -y libswscale-dev
+  sudo apt-get install -y libxtst-dev
+  sudo apt-get install -y libssl-dev
+  sudo apt-get install -y pkg-config
+  sudo apt-get install -y zlib1g-dev
+
+```
+이 코드는 libwebsockets라는 프로그램을 설치한 뒤 so파일을 /usr/lib에 위치시켜야 합니다.
+```bash
+  git clone https://github.com/warmcat/libwebsockets.git
+  mkdir build
+  cd build
+  cmake ..
+  make -j16
+  sudo make install
+  cd /usr/lib
+  ln -s INSTALL_PATH/libwebsockets/lib/libwebsockets.so.19 .
+```
+다음과 같이 입력하여 설치합니다.
+```bash
+  git clone git@github.com:tjdalsckd/jsmpeg-vnc-linux-1.git
+  mkdir build
+  cd build
+  cmake ..
+  make -j16
+
+```
+서버측에서 다음과 같은 명령을 통해 실행합니다.
+
+```
+    sudo ./jsmpeg-vnc -b 10000 -s 1920x1080 -f 30 -p 6900  desktop
+```
+
+클라이언트 컴퓨터에서는 bin폴더 밑의 javascript파일을 수정해줘야하며 jsmpg-vnc.js 파일의  IP_ADDRESS:PORT부분을 자신의 서버 ip와 port번호로 설정합니다.
+```
+var client = new WebSocket( 'ws://' + "IP_ADDRESS:PORT"+ '/ws' );
+
+```
+이후 bin 폴더 내의 index.html을 chrome을 통해 실행하면 됩니다.
